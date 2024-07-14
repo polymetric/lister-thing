@@ -43,10 +43,14 @@ for (var i = 0; i < 5; i++) {
 
 items = itemList.children
 
-filter.addEventListener('keyup', function(e){
-    e.preventDefault();
+filter.addEventListener('keyup', filterEvent);
+filter.addEventListener('cut', filterEvent);
+filter.addEventListener('paste', filterEvent);
+
+function filterEvent(e) {
+    // e.preventDefault();
     filterItems();
-});
+}
 
 function filterItems() {
     filterQuery = filter.value;
