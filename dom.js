@@ -4,6 +4,8 @@ var itemList = document.querySelector('#items');
 var filter = document.querySelector('#filter');
 var filterQuery = "";
 
+var emptyListNote = document.querySelector('#empty-list');
+
 form.addEventListener('submit', function(e){
     e.preventDefault();
     var name = document.querySelector('#field-item-name').value;
@@ -32,6 +34,7 @@ function addDeleteButton(li) {
 
     deleteButton.addEventListener('click', function(){
         itemList.removeChild(li);
+        filterItems();
     });
 
     li.appendChild(deleteButton);
@@ -53,8 +56,8 @@ function filterEvent(e) {
 }
 
 function filterItems() {
-    filterQuery = filter.value;
-    invisibleItems = 0;
+    var filterQuery = filter.value;
+    var invisibleItems = 0;
     for (var i = 0; i < items.length; i++) {
         itemText = items[i].querySelector('.item-text').textContent.toLowerCase();
         if (!itemText.toLowerCase().includes(filterQuery) && filterQuery.length > 0) {
@@ -63,5 +66,11 @@ function filterItems() {
         } else {
             items[i].style.display = "inline";
         }
+    }
+    console.log(invisibleItems);
+    if (invisibleItems == items.length) {
+        emptyListNote.style = "display:inline";
+    } else {
+        emptyListNote.style = "display:none";
     }
 }
