@@ -1,31 +1,63 @@
-var odd = document.querySelectorAll('li:nth-child(odd)');
-var even = document.querySelectorAll('li:nth-child(even)');
-for (var i = 0; i < odd.length; i++) {
-    odd[i].style.backgroundColor='#f4f4f4';
-    even[i].style.backgroundColor='#fff';
-}
-
+var form = document.querySelector('#add-form');
 var itemList = document.querySelector('#items');
-console.log(itemList.parentNode);
 
-document.querySelector('#field-item-name').onkeypress = function(e) {
-    var key = e.charCode || e.keyCode || 0;     
-    if (key == 13) {
-      e.preventDefault();
-        addListElement(document.querySelector('#field-item-name').value)
-    }
-  }
-  
+var filter = document.querySelector('#filter');
+var filterQuery = "";
 
-var submitButton = document.querySelector('#btn-submit').addEventListener
-('click', function(){
-    addListElement(document.querySelector('#field-item-name').value)
+form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.querySelector('#field-item-name').value;
+    addItem(name);
 });
 
-function addListElement(text) {
-    newItem = document.createElement('li');
-    newItem.className = "list-group-item";
-    newItem.textContent = text;
-    list = document.querySelector('#items');
-    list.append(newItem);
+function addItem(name) {
+    var li = document.createElement('li');
+    li.className = "list-group-item";
+
+    var itemText = document.createElement('span');
+    itemText.className = "item-text"
+    itemText.appendChild(document.createTextNode(name));
+    li.appendChild(itemText);
+    addDeleteButton(li);
+
+    itemList.appendChild(li);
+
+    filterItems();
+}
+
+function addDeleteButton(li) {
+    var deleteButton = document.createElement('button');
+    deleteButton.className = "btn btn-danger btn-sm float-right delete";
+    deleteButton.appendChild(document.createTextNode("deleet"));
+
+    deleteButton.addEventListener('click', function(){
+        itemList.removeChild(li);
+    });
+
+    li.appendChild(deleteButton);
+}
+
+for (var i = 0; i < 5; i++) {
+    addItem("Item " + (i+1));
+}
+
+items = itemList.children
+
+filter.addEventListener('keyup', function(e){
+    e.preventDefault();
+    filterItems();
+});
+
+function filterItems() {
+    filterQuery = filter.value;
+    invisibleItems = 0;
+    for (var i = 0; i < items.length; i++) {
+        itemText = items[i].querySelector('.item-text').textContent.toLowerCase();
+        if (!itemText.toLowerCase().includes(filterQuery) && filterQuery.length > 0) {
+            items[i].style.display = "none";
+            invisibleItems += 1;
+        } else {
+            items[i].style.display = "inline";
+        }
+    }
 }
